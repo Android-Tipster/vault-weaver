@@ -300,11 +300,9 @@ const VIEW_TYPE_VAULT_WEAVER = "vault-weaver-results";
 
 class VaultWeaverView extends ItemView {
 	private result: AnalysisResult | null = null;
-	private plugin: VaultWeaverPlugin;
 
-	constructor(leaf: WorkspaceLeaf, plugin: VaultWeaverPlugin) {
+	constructor(leaf: WorkspaceLeaf, _plugin: VaultWeaverPlugin) {
 		super(leaf);
-		this.plugin = plugin;
 	}
 
 	getViewType() {
@@ -312,7 +310,7 @@ class VaultWeaverView extends ItemView {
 	}
 
 	getDisplayText() {
-		return "Vault Weaver";
+		return "Vault weaver";
 	}
 
 	getIcon() {
@@ -348,7 +346,7 @@ class VaultWeaverView extends ItemView {
 
 		// Header
 		const header = container.createEl("div", { cls: "vw-header" });
-		header.createEl("h2", { text: "Vault Weaver results" });
+		header.createEl("h2", { text: "Analysis results" });
 		header.createEl("p", {
 			cls: "vw-summary",
 			text: r.summary,
@@ -508,10 +506,10 @@ class VaultWeaverView extends ItemView {
 
 		// ── Footer ────────────────────────────────────────────────────────────
 		const footer = container.createEl("div", { cls: "vw-footer" });
-		footer.createEl("span", { text: "Vault Weaver by Noah Albert" });
+		footer.createEl("span", { text: "Vault weaver by Noah Albert" });
 		const kofiLink = footer.createEl("a", {
 			href: "https://ko-fi.com/noahalbert",
-			text: "Support on Ko-fi",
+			text: "Support on ko-fi",
 		});
 		kofiLink.setAttr("target", "_blank");
 	}
@@ -550,7 +548,6 @@ class VaultWeaverView extends ItemView {
 
 class AnalysisProgressModal extends Modal {
 	private statusEl: HTMLElement;
-	private resolve!: (value: boolean) => void;
 	public cancelled = false;
 
 	constructor(app: App) {
@@ -601,16 +598,14 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl).setName("Vault Weaver settings").setHeading();
+		new Setting(containerEl).setHeading();
 
 		new Setting(containerEl)
 			.setName("Anthropic API key")
-			.setDesc(
-				"Your Claude API key from console.anthropic.com. Free tier available."
-			)
+			.setDesc("Your API key from console.anthropic.com")
 			.addText((text) =>
 				text
-					.setPlaceholder("sk-ant-...")
+					.setPlaceholder("sk-ant-api-key")
 					.setValue(this.plugin.settings.anthropicApiKey)
 					.onChange(async (value) => {
 						this.plugin.settings.anthropicApiKey = value.trim();
@@ -637,7 +632,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 		new Setting(containerEl)
 			.setName("Max notes per analysis")
 			.setDesc(
-				"Limit how many notes are sent to Claude. Higher = better results but more cost."
+				"Limit how many notes are sent for analysis. Higher = better results but more cost."
 			)
 			.addSlider((slider) =>
 				slider
@@ -652,12 +647,12 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName("Analysis depth")
-			.setDesc("Quick: fast scan. Standard: balanced. Deep: comprehensive (uses Opus).")
+			.setDesc("Quick uses claude haiku, deep uses claude opus.")
 			.addDropdown((drop) =>
 				drop
-					.addOption("quick", "Quick (Haiku, fewer suggestions)")
+					.addOption("quick", "Quick (fewer suggestions, cheapest)")
 					.addOption("standard", "Standard (your chosen model)")
-					.addOption("deep", "Deep (Opus, most comprehensive)")
+					.addOption("deep", "Deep (most comprehensive)")
 					.setValue(this.plugin.settings.analysisDepth)
 					.onChange(async (value) => {
 						this.plugin.settings.analysisDepth =
@@ -668,7 +663,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 
 		const supportDiv = containerEl.createEl("div", { cls: "vw-support-banner" });
 		supportDiv.createEl("p", {
-			text: "Vault Weaver is free and open source. If it saves you time, consider supporting:",
+			text: "This plugin is free and open source. If it saves you time, consider supporting:",
 		});
 		supportDiv.createEl("a", {
 			href: "https://ko-fi.com/noahalbert",
@@ -687,7 +682,7 @@ export default class VaultWeaverPlugin extends Plugin {
 	private getView(): VaultWeaverView | null {
 		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_VAULT_WEAVER);
 		if (leaves.length > 0 && leaves[0].view instanceof VaultWeaverView) {
-			return leaves[0].view as VaultWeaverView;
+			return leaves[0].view;
 		}
 		return null;
 	}
@@ -702,7 +697,7 @@ export default class VaultWeaverPlugin extends Plugin {
 		);
 
 		// Ribbon icon
-		this.addRibbonIcon("git-merge", "Vault Weaver", () => {
+		this.addRibbonIcon("git-merge", "Open vault weaver", () => {
 			void this.activateView();
 		});
 
@@ -763,7 +758,7 @@ export default class VaultWeaverPlugin extends Plugin {
 		if (!leaf) {
 			const rightLeaf = workspace.getRightLeaf(false);
 			if (!rightLeaf) {
-				new Notice("Could not open Vault Weaver panel.");
+				new Notice("Could not open the panel.");
 				return;
 			}
 			leaf = rightLeaf;
@@ -775,7 +770,7 @@ export default class VaultWeaverPlugin extends Plugin {
 	async runAnalysis(_focus?: string) {
 		if (!this.settings.anthropicApiKey) {
 			new Notice(
-				"Please add your Anthropic API key in Vault Weaver settings (Settings > Vault Weaver).",
+				"Please add your Anthropic API key in settings.",
 				8000
 			);
 			return;
@@ -826,7 +821,7 @@ export default class VaultWeaverPlugin extends Plugin {
 			return;
 		}
 		if (!this.settings.anthropicApiKey) {
-			new Notice("Please add your Anthropic API key in settings.");
+			new Notice("Please add your API key in settings.");
 			return;
 		}
 
