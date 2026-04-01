@@ -321,7 +321,7 @@ class VaultWeaverView extends ItemView {
 
 	setResult(result: AnalysisResult) {
 		this.result = result;
-		this.render();
+		void this.render();
 	}
 
 	private createBadge(text: string, color: string): HTMLElement {
@@ -331,7 +331,7 @@ class VaultWeaverView extends ItemView {
 		return badge;
 	}
 
-	async render() {
+	render() {
 		const container = this.containerEl.children[1] as HTMLElement;
 		container.empty();
 		container.addClass("vault-weaver-container");
@@ -348,7 +348,7 @@ class VaultWeaverView extends ItemView {
 
 		// Header
 		const header = container.createEl("div", { cls: "vw-header" });
-		header.createEl("h2", { text: "Vault Weaver Results" });
+		header.createEl("h2", { text: "Vault Weaver results" });
 		header.createEl("p", {
 			cls: "vw-summary",
 			text: r.summary,
@@ -363,7 +363,7 @@ class VaultWeaverView extends ItemView {
 		if (r.backlinkSuggestions.length > 0) {
 			const section = container.createEl("div", { cls: "vw-section" });
 			const sectionHeader = section.createEl("div", { cls: "vw-section-header" });
-			sectionHeader.createEl("h3", { text: "Missing Backlinks" });
+			sectionHeader.createEl("h3", { text: "Missing backlinks" });
 			sectionHeader.createEl("span", {
 				cls: "vw-count",
 				text: `${r.backlinkSuggestions.length}`,
@@ -376,9 +376,7 @@ class VaultWeaverView extends ItemView {
 
 				const noteLink = itemHeader.createEl("span", { cls: "vw-note-link" });
 				noteLink.textContent = s.sourceNote;
-				noteLink.addEventListener("click", () =>
-					this.openNote(s.sourceNote)
-				);
+				noteLink.addEventListener("click", () => void this.openNote(s.sourceNote));
 
 				itemHeader.createEl("span", { cls: "vw-arrow", text: " → " });
 
@@ -386,9 +384,7 @@ class VaultWeaverView extends ItemView {
 					cls: "vw-note-link vw-target",
 				});
 				targetLink.textContent = `[[${s.targetNote}]]`;
-				targetLink.addEventListener("click", () =>
-					this.openNote(s.targetNote)
-				);
+				targetLink.addEventListener("click", () => void this.openNote(s.targetNote));
 
 				itemHeader.appendChild(
 					this.createBadge(s.confidence, s.confidence)
@@ -406,11 +402,9 @@ class VaultWeaverView extends ItemView {
 				const actions = item.createEl("div", { cls: "vw-actions" });
 				const insertBtn = actions.createEl("button", {
 					cls: "vw-btn vw-btn-primary",
-					text: "Open Source Note",
+					text: "Open source note",
 				});
-				insertBtn.addEventListener("click", () =>
-					this.openNote(s.sourceNote)
-				);
+				insertBtn.addEventListener("click", () => void this.openNote(s.sourceNote));
 			}
 		}
 
@@ -418,7 +412,7 @@ class VaultWeaverView extends ItemView {
 		if (r.orphanedNotes.length > 0) {
 			const section = container.createEl("div", { cls: "vw-section" });
 			const sectionHeader = section.createEl("div", { cls: "vw-section-header" });
-			sectionHeader.createEl("h3", { text: "Orphaned Notes" });
+			sectionHeader.createEl("h3", { text: "Orphaned notes" });
 			sectionHeader.createEl("span", {
 				cls: "vw-count",
 				text: `${r.orphanedNotes.length}`,
@@ -429,7 +423,7 @@ class VaultWeaverView extends ItemView {
 				const item = list.createEl("div", { cls: "vw-item" });
 				const noteLink = item.createEl("span", { cls: "vw-note-link" });
 				noteLink.textContent = o.noteName;
-				noteLink.addEventListener("click", () => this.openNote(o.noteName));
+				noteLink.addEventListener("click", () => void this.openNote(o.noteName));
 
 				item.createEl("p", {
 					cls: "vw-reason",
@@ -447,9 +441,7 @@ class VaultWeaverView extends ItemView {
 							cls: "vw-note-link vw-conn-chip",
 						});
 						connLink.textContent = conn;
-						connLink.addEventListener("click", () =>
-							this.openNote(conn)
-						);
+						connLink.addEventListener("click", () => void this.openNote(conn));
 					}
 				}
 			}
@@ -459,7 +451,7 @@ class VaultWeaverView extends ItemView {
 		if (r.duplicateGroups.length > 0) {
 			const section = container.createEl("div", { cls: "vw-section" });
 			const sectionHeader = section.createEl("div", { cls: "vw-section-header" });
-			sectionHeader.createEl("h3", { text: "Potential Duplicates" });
+			sectionHeader.createEl("h3", { text: "Potential duplicates" });
 			sectionHeader.createEl("span", {
 				cls: "vw-count",
 				text: `${r.duplicateGroups.length}`,
@@ -472,7 +464,7 @@ class VaultWeaverView extends ItemView {
 				for (const noteName of d.notes) {
 					const chip = noteRow.createEl("span", { cls: "vw-note-link vw-chip" });
 					chip.textContent = noteName;
-					chip.addEventListener("click", () => this.openNote(noteName));
+					chip.addEventListener("click", () => void this.openNote(noteName));
 				}
 
 				item.createEl("p", {
@@ -490,7 +482,7 @@ class VaultWeaverView extends ItemView {
 		if (r.knowledgeGaps.length > 0) {
 			const section = container.createEl("div", { cls: "vw-section" });
 			const sectionHeader = section.createEl("div", { cls: "vw-section-header" });
-			sectionHeader.createEl("h3", { text: "Knowledge Gaps" });
+			sectionHeader.createEl("h3", { text: "Knowledge gaps" });
 			sectionHeader.createEl("span", {
 				cls: "vw-count",
 				text: `${r.knowledgeGaps.length}`,
@@ -506,9 +498,10 @@ class VaultWeaverView extends ItemView {
 					cls: "vw-btn vw-btn-secondary",
 					text: `Create "${g.suggestedTitle}"`,
 				});
-				createBtn.addEventListener("click", async () => {
-					await this.createNote(g.suggestedTitle);
-					new Notice(`Created: ${g.suggestedTitle}`);
+				createBtn.addEventListener("click", () => {
+					void this.createNote(g.suggestedTitle).then(() => {
+						new Notice(`Created: ${g.suggestedTitle}`);
+					});
 				});
 			}
 		}
@@ -567,7 +560,7 @@ class AnalysisProgressModal extends Modal {
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.addClass("vw-progress-modal");
-		contentEl.createEl("h2", { text: "Analyzing Vault..." });
+		contentEl.createEl("h2", { text: "Analyzing vault..." });
 		this.statusEl = contentEl.createEl("p", {
 			text: "Scanning notes...",
 			cls: "vw-status",
@@ -608,10 +601,10 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl("h2", { text: "Vault Weaver Settings" });
+		new Setting(containerEl).setName("Vault Weaver settings").setHeading();
 
 		new Setting(containerEl)
-			.setName("Anthropic API Key")
+			.setName("Anthropic API key")
 			.setDesc(
 				"Your Claude API key from console.anthropic.com. Free tier available."
 			)
@@ -626,7 +619,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("AI Model")
+			.setName("AI model")
 			.setDesc("Haiku is fastest and cheapest. Opus gives the best suggestions.")
 			.addDropdown((drop) =>
 				drop
@@ -642,7 +635,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Max Notes Per Analysis")
+			.setName("Max notes per analysis")
 			.setDesc(
 				"Limit how many notes are sent to Claude. Higher = better results but more cost."
 			)
@@ -658,7 +651,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Analysis Depth")
+			.setName("Analysis depth")
 			.setDesc("Quick: fast scan. Standard: balanced. Deep: comprehensive (uses Opus).")
 			.addDropdown((drop) =>
 				drop
@@ -690,7 +683,14 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 
 export default class VaultWeaverPlugin extends Plugin {
 	settings: VaultWeaverSettings = DEFAULT_SETTINGS;
-	private view: VaultWeaverView | null = null;
+
+	private getView(): VaultWeaverView | null {
+		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_VAULT_WEAVER);
+		if (leaves.length > 0 && leaves[0].view instanceof VaultWeaverView) {
+			return leaves[0].view as VaultWeaverView;
+		}
+		return null;
+	}
 
 	async onload() {
 		await this.loadSettings();
@@ -698,18 +698,18 @@ export default class VaultWeaverPlugin extends Plugin {
 		// Register the sidebar view
 		this.registerView(
 			VIEW_TYPE_VAULT_WEAVER,
-			(leaf) => (this.view = new VaultWeaverView(leaf, this))
+			(leaf) => new VaultWeaverView(leaf, this)
 		);
 
 		// Ribbon icon
 		this.addRibbonIcon("git-merge", "Vault Weaver", () => {
-			this.activateView();
+			void this.activateView();
 		});
 
 		// Command: Analyze Vault
 		this.addCommand({
 			id: "analyze-vault",
-			name: "Analyze Knowledge Graph",
+			name: "Analyze knowledge graph",
 			callback: async () => {
 				await this.runAnalysis();
 			},
@@ -718,7 +718,7 @@ export default class VaultWeaverPlugin extends Plugin {
 		// Command: Find Orphaned Notes
 		this.addCommand({
 			id: "find-orphans",
-			name: "Find Orphaned Notes",
+			name: "Find orphaned notes",
 			callback: async () => {
 				await this.runAnalysis("orphans");
 			},
@@ -727,8 +727,8 @@ export default class VaultWeaverPlugin extends Plugin {
 		// Command: Suggest Backlinks for Current Note
 		this.addCommand({
 			id: "suggest-backlinks-current",
-			name: "Suggest Backlinks for Current Note",
-			editorCallback: async (editor, view) => {
+			name: "Suggest backlinks for current note",
+			editorCallback: async (_editor, view) => {
 				if (!(view instanceof MarkdownView)) return;
 				await this.runAnalysisForCurrentNote(view.file);
 			},
@@ -740,13 +740,13 @@ export default class VaultWeaverPlugin extends Plugin {
 		// Open view on startup if configured
 		if (this.settings.autoSuggestOnOpen) {
 			this.app.workspace.onLayoutReady(() => {
-				this.activateView();
+				void this.activateView();
 			});
 		}
 	}
 
 	onunload() {
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_VAULT_WEAVER);
+		// Obsidian manages leaf cleanup automatically
 	}
 
 	async loadSettings() {
@@ -769,10 +769,10 @@ export default class VaultWeaverPlugin extends Plugin {
 			leaf = rightLeaf;
 			await leaf.setViewState({ type: VIEW_TYPE_VAULT_WEAVER, active: true });
 		}
-		workspace.revealLeaf(leaf);
+		void workspace.revealLeaf(leaf);
 	}
 
-	async runAnalysis(focus?: string) {
+	async runAnalysis(_focus?: string) {
 		if (!this.settings.anthropicApiKey) {
 			new Notice(
 				"Please add your Anthropic API key in Vault Weaver settings (Settings > Vault Weaver).",
@@ -803,8 +803,9 @@ export default class VaultWeaverPlugin extends Plugin {
 
 			// Open view and display results
 			await this.activateView();
-			if (this.view) {
-				this.view.setResult(result);
+			const view = this.getView();
+			if (view) {
+				view.setResult(result);
 			}
 
 			new Notice(
@@ -867,8 +868,9 @@ export default class VaultWeaverPlugin extends Plugin {
 			);
 
 			await this.activateView();
-			if (this.view) {
-				this.view.setResult(result);
+			const view = this.getView();
+			if (view) {
+				view.setResult(result);
 			}
 		} catch (err) {
 			const msg = err instanceof Error ? err.message : String(err);
