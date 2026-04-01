@@ -506,7 +506,7 @@ class VaultWeaverView extends ItemView {
 
 		// ── Footer ────────────────────────────────────────────────────────────
 		const footer = container.createEl("div", { cls: "vw-footer" });
-		footer.createEl("span", { text: "Vault weaver by Noah Albert" });
+		footer.createEl("span", { text: "Vault Weaver by Noah Albert" });
 		const kofiLink = footer.createEl("a", {
 			href: "https://ko-fi.com/noahalbert",
 			text: "Support on ko-fi",
@@ -605,7 +605,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 			.setDesc("Your API key from console.anthropic.com")
 			.addText((text) =>
 				text
-					.setPlaceholder("sk-ant-api-key")
+					.setPlaceholder("Enter your API key")
 					.setValue(this.plugin.settings.anthropicApiKey)
 					.onChange(async (value) => {
 						this.plugin.settings.anthropicApiKey = value.trim();
@@ -667,7 +667,7 @@ class VaultWeaverSettingTab extends PluginSettingTab {
 		});
 		supportDiv.createEl("a", {
 			href: "https://ko-fi.com/noahalbert",
-			text: "Buy me a coffee on Ko-fi",
+			text: "Buy me a coffee on ko-fi",
 		}).setAttr("target", "_blank");
 	}
 }
@@ -770,7 +770,7 @@ export default class VaultWeaverPlugin extends Plugin {
 	async runAnalysis(_focus?: string) {
 		if (!this.settings.anthropicApiKey) {
 			new Notice(
-				"Please add your Anthropic API key in settings.",
+				"Please add an API key in settings.",
 				8000
 			);
 			return;
