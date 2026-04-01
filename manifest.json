@@ -5,7 +5,7 @@
   "minAppVersion": "1.0.0",
   "description": "AI-powered knowledge graph optimizer. Suggests missing backlinks, finds orphaned notes, and detects duplicate content across your vault using Claude AI.",
   "author": "Noah Albert",
-  "authorUrl": "https://github.com/Android-Tipster/vault-weaver",
+  "authorUrl": "https://github.com/Android-Tipster",
   "fundingUrl": "https://ko-fi.com/noahalbert",
   "isDesktopOnly": false
 }
