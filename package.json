@@ -1,0 +1,27 @@
+{
+  "name": "vault-weaver",
+  "version": "1.0.0",
+  "description": "AI-powered knowledge graph optimizer for Obsidian",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
+  },
+  "keywords": ["obsidian", "knowledge-graph", "ai", "backlinks", "claude"],
+  "author": "Noah Albert",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "7.4.0",
+    "@typescript-eslint/parser": "7.4.0",
+    "builtin-modules": "3.3.0",
+    "esbuild": "0.20.2",
+    "obsidian": "latest",
+    "tslib": "2.6.2",
+    "typescript": "5.4.5"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.81.0"
+  }
+}
