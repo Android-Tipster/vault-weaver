@@ -506,7 +506,6 @@ class VaultWeaverView extends ItemView {
 
 		// ── Footer ────────────────────────────────────────────────────────────
 		const footer = container.createEl("div", { cls: "vw-footer" });
-		footer.createEl("span", { text: "Vault Weaver by Noah Albert" });
 		const kofiLink = footer.createEl("a", {
 			href: "https://ko-fi.com/noahalbert",
 			text: "Support on ko-fi",
